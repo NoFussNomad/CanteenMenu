@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canteen Menu</title> 
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <script type="module" src="script.js" defer></script>
+</head>
+
+<body>
+
+  <div id="login-view" class="login-container">
+      <div class="login-box">
+          <h1 style="color:#1565C0; margin-bottom:10px;">Canteen LogIn</h1>
+          
+          <div class="input-group">
+              <label>LRN</label>
+              <input type="text" id="login-id" placeholder="Enter ID" oninput="if(this.value.length > 12) this.value = this.value.slice(0, 12);"
+          >
+          </div>
+          
+          <div class="input-group">
+              <label>Password</label>
+              <input type="password" id="login-pass" placeholder="Enter Password">
+          </div>
+
+          <button class="btn btn-primary btn-block" id="login-btn">LOGIN</button>
+          
+          <p style="margin-top:15px; font-size:12px; color:#1565C0; cursor:pointer; text-decoration:underline;" onclick="document.getElementById('register-modal').classList.remove('hidden')">
+            No account? Sign Up here
+          </p>
+          
+      </div>
+  </div>
+
+  <div id="app-container" class="phone hidden">
+
+    <div id="header" class="header">
+        <div class="qr-icon" id="qr-btn">QR</div> 
+        <span id="header-title">Canteen Menu</span>
+        <div class="profile-icon" id="profile-btn"><div class="p-dot"></div></div>
+    </div>
+
+    <div id="admin-bar" class="admin-bar">
+        <span id="admin-role-display">Staff Mode</span>
+        <div id="admin-actions"></div>
+    </div>
+
+    <div id="top-controls" class="controls-wrapper">
+      <div class="search">
+          <input type="text" id="search-bar" placeholder="🔍 Search items...">
+      </div>
+      <div class="tabs">
+        <span class="tab active" data-cat="biscuit">Biscuits</span>
+        <span class="tab" data-cat="junk">Snacks</span>
+        <span class="tab" data-cat="beverage">Drinks</span>
+        <span class="tab" data-cat="rice">Meals</span>
+      </div>
+    </div>
+
+    <div class="main-scroll">
+      
+      <div id="view-menu">
+        <div id="menu-container"></div>
+      </div>
+
+      <div id="view-cart" class="hidden">
+        <h3 class="section-title">Your Cart</h3>
+        <div id="cart-container"></div>
+        <div id="cart-actions" class="hidden">
+             <div class="total-row">
+                 <span>Total Amount</span>
+                 <span class="total-price">₱<span id="cart-total">0</span></span>
+             </div>
+             <button class="btn btn-primary btn-block" id="checkout-btn">Place Order</button>
+        </div>
+      </div>
+
+      <div id="view-orders" class="hidden">
+        <h3 class="section-title">Order History</h3>
+        <div id="student-orders-container"></div>
+      </div>
+
+      <div id="view-queue" class="hidden">
+        <h3 class="section-title">Kitchen Queue</h3>
+        <div id="queue-container"></div>
+      </div>
+
+      <div id="view-history" class="hidden">
+        <h3 class="section-title">Transaction Log</h3>
+        <input type="text" id="history-search" placeholder="Search Student Name/ID..." 
+               style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px;">
+        <div id="history-container"></div>
+      </div>
+
+      <div id="view-reports" class="hidden">
+        <h3 class="section-title" style="color:#d32f2f">Incident Log</h3>
+        <p class="subtitle" style="font-size:11px; margin-bottom:15px;">Click a student name to manage their account.</p>
+        <div id="reports-log-container"></div>
+      </div>
+
+      <div id="view-accounts" class="hidden">
+        <h3 class="section-title">User Accounts</h3>
+        <input type="text" id="account-search" placeholder="Search Name or LRN..." 
+               style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
+        <button class="btn btn-primary" style="width:100%; margin-bottom:15px;" id="add-user-btn">+ Add New Student</button>
+        <div id="accounts-container"></div>
+      </div>
+
+      <div id="view-favorite" class="hidden">
+        <h3 class="section-title">Saved Favorites</h3>
+        <div id="fav-container"></div>
+      </div>
+
+      <div id="view-profile" class="hidden">
+        <div class="profile-card">
+            <div class="avatar-circle" id="profile-initials">JD</div>
+            
+            <h2 id="profile-name" style="margin-bottom:0;">Juan Tamad</h2>
+            <p id="profile-display-lrn" style="margin:0 0 15px; color:#666; font-size:14px; letter-spacing:1px; font-weight:bold;">000000000000</p>
+            
+            <p id="profile-role" class="role-badge student">Student</p>
+            
+            <div class="info-grid hidden">
+                <div><span>Section:</span> <strong id="profile-section">--</strong></div>
+                <div><span>Adviser:</span> <strong id="profile-adviser">--</strong></div>
+            </div>
+            
+            <button id="logout-btn" class="btn btn-danger btn-block" style="margin-top:20px;">Logout</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <div class="footer-item student-only admin-only" id="nav-menu"><div class="icon">🏠</div><span>Menu</span></div>
+      <div class="footer-item student-only" id="nav-cart"><div class="icon">🛒</div><span>Cart</span></div>
+      <div class="footer-item student-only" id="nav-orders"><div class="icon">🧾</div><span>Orders</span></div>
+      <div class="footer-item student-only" id="nav-fav"><div class="icon">❤</div><span>Saved</span></div>
+      
+      <div class="footer-item staff-only hidden" id="nav-queue"><div class="icon">👨‍🍳</div><span>Queue</span></div>
+      <div class="footer-item staff-only hidden" id="nav-history"><div class="icon">📜</div><span>Log</span></div>
+      
+      <div class="footer-item admin-only hidden" id="nav-accounts"><div class="icon">👥</div><span>Users</span></div>
+      <div class="footer-item admin-only hidden" id="nav-reports"><div class="icon">⚠️</div><span>Reports</span></div>
+
+      <div class="footer-item" id="nav-profile"><div class="icon">👤</div><span>Me</span></div>
+    </div>
+
+  </div>
+
+  <div id="report-modal" class="modal hidden">
+      <div class="modal-content animate-pop">
+          <h3>Report Student</h3>
+          <input type="text" id="report-reason" placeholder="Reason (e.g., Unpaid)">
+          <div style="display:flex; gap:10px; margin-top:10px;">
+              <button class="btn btn-danger" style="flex:1" id="submit-report-btn">Submit</button>
+              <button class="btn btn-outline" style="flex:1" onclick="document.getElementById('report-modal').classList.add('hidden')">Cancel</button>
+          </div>
+      </div>
+  </div>
+
+  <div id="add-user-modal" class="modal hidden">
+    <div class="modal-content animate-pop" style="text-align:left">
+        <h3 style="text-align:center">Add New User</h3>
+        
+        <label>Role</label>
+        <select id="new-user-role" style="width:100%; padding:12px; margin:8px 0; border:1px solid #ddd; border-radius:8px; background:#fafafa;">
+            <option value="student">Student</option>
+            <option value="staff">Kitchen Staff</option>
+        </select>
+
+        <label>Full Name</label>
+        <input type="text" id="new-user-name" placeholder="Full Name">
+        
+        <label>ID / LRN</label>
+        <input type="number" id="new-user-lrn" placeholder="LRN or Employee ID">
+        
+        <label>Section (Student Only)</label>
+        <input type="text" id="new-user-section" placeholder="e.g. ICT-12">
+        
+        <label>Adviser (Student Only)</label>
+        <input type="text" id="new-user-adviser" placeholder="e.g. Mrs. Santos">
+        
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <button class="btn btn-primary" style="flex:1" id="save-user-btn">Create</button>
+            <button class="btn btn-outline" style="flex:1" onclick="document.getElementById('add-user-modal').classList.add('hidden')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+  <div id="register-modal" class="modal hidden">
+      <div class="modal-content animate-pop" style="text-align:left">
+          <h3 style="text-align:center">Student Registration</h3>
+          <p style="font-size:11px; color:#666; text-align:center; margin-bottom:15px;">
+              Your account must be approved by Admin before you can login.
+          </p>
+          
+          <label>Given Name</label>
+          <input type="text" id="reg-given" placeholder="e.g. Juan">
+
+          <label>Last Name</label>
+          <input type="text" id="reg-last" placeholder="e.g. Tamad">
+          
+          <label>LRN (12 Digits)</label>
+          <input type="number" id="reg-lrn" placeholder="000000000000" oninput="if(this.value.length > 12) this.value = this.value.slice(0, 12);"> 
+          
+          <label>Section</label>
+          <input type="text" id="reg-section" placeholder="e.g. 12-ICT-1P">
+
+          <label>Adviser</label>
+          <input type="text" id="reg-adviser" placeholder="e.g. Mr. Rodmar Bandojo">
+          
+          <div style="display:flex; gap:10px; margin-top:10px;">
+              <button class="btn btn-primary" style="flex:1" onclick="registerStudent()">Submit Request</button>
+              <button class="btn btn-outline" style="flex:1" onclick="document.getElementById('register-modal').classList.add('hidden')">Cancel</button>
+          </div>
+      </div>
+  </div>
+
+  <div id="add-product-modal" class="modal hidden">
+      <div class="modal-content animate-pop">
+          <h3>Manage Item</h3>
+          <input type="text" id="new-p-name" placeholder="Name">
+          <input type="number" id="new-p-price" placeholder="Price">
+          <input type="number" id="new-p-stock" placeholder="Stock">
+          <input type="text" id="new-p-img" placeholder="Image URL">
+          <select id="new-p-cat">
+              <option value="biscuit">Biscuit</option>
+              <option value="junk">Snacks</option>
+              <option value="beverage">Drinks</option>
+              <option value="rice">Meals</option>
+          </select>
+          <div style="display:flex; gap:10px; margin-top:10px;">
+              <button class="btn btn-primary" style="flex:1" id="save-product-btn">Save</button>
+              <button class="btn btn-danger" style="flex:1" onclick="document.getElementById('add-product-modal').classList.add('hidden')">Cancel</button>
+          </div>
+      </div>
+  </div>
+
+  <div id="qr-modal" class="modal hidden" onclick="this.classList.add('hidden')">
+      <div class="modal-content animate-pop">
+          <h3>Scan for Menu</h3>
+          <div class="qr-display"><img id="real-qr-code" src="" alt="QR" style="width:100%"></div>
+          <button class="btn btn-danger" style="margin-top:15px; width:100%">Close</button>
+      </div>
+  </div>
+
+</body>
+</html>
