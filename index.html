@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canteen System</title> 
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <script type="module" src="script.js" defer></script>
+</head>
+
+<body>
+
+  <div id="login-view" class="login-container">
+      <div class="login-box">
+          <h1 style="color:#1565C0; margin-bottom:10px;">Canteen LogIn</h1>
+          <div class="input-group">
+              <label>ID Number</label>
+              <input type="number" id="login-id" placeholder="Enter ID">
+          </div>
+          <div class="input-group">
+              <label>Password</label>
+              <input type="password" id="login-pass" placeholder="Enter Password">
+          </div>
+          <button class="btn btn-primary btn-block" id="login-btn">LOGIN</button>
+      </div>
+  </div>
+
+  <div id="app-container" class="phone hidden">
+
+    <div id="header" class="header">
+        <div class="qr-icon" id="qr-btn">QR</div> 
+        <span id="header-title">Canteen System</span>
+        <div class="profile-icon" id="profile-btn"><div class="p-dot"></div></div>
+    </div>
+
+    <div id="admin-bar" class="admin-bar">
+        <span id="admin-role-display">User Mode</span>
+        <div id="admin-actions"></div>
+    </div>
+
+    <div id="canteen-banner" class="hidden" style="background:#e3f2fd; color:#1565C0; padding:10px 15px; font-size:12px; font-weight:bold; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #bbdefb;">
+        <span id="canteen-banner-text">Viewing Canteen 1</span>
+        <button id="switch-canteen-btn" class="btn btn-outline" style="padding:5px 10px; font-size:10px; border-color:#1565C0; color:#1565C0;" onclick="window.promptSwitchCanteen()">Switch Canteen</button>
+    </div>
+
+    <div id="top-controls" class="controls-wrapper">
+      <div class="search">
+          <input type="text" id="search-bar" placeholder="🔍 Search items...">
+      </div>
+      <div class="tabs">
+        <span class="tab active" data-cat="biscuit">Biscuits</span>
+        <span class="tab" data-cat="junk">Snacks</span>
+        <span class="tab" data-cat="beverage">Drinks</span>
+        <span class="tab" data-cat="rice">Meals</span>
+      </div>
+    </div>
+
+    <div class="main-scroll">
+      
+      <div id="view-canteen-select" class="hidden">
+        <h3 class="section-title" style="text-align:center; margin-top:20px;">Select a Canteen</h3>
+        
+        <div class="order-card" style="display:block; padding:20px; text-align:center; cursor:pointer; border: 2px solid #1565C0; margin-bottom:15px;" onclick="window.selectCanteen('1')">
+            <h2 style="margin:0; color:#1565C0;">Canteen 1</h2>
+            <p style="margin:5px 0 0 0; font-size:12px; color:#666;">Near the Main Gate</p>
+        </div>
+
+        <div class="order-card" style="display:block; padding:20px; text-align:center; cursor:pointer; border: 2px solid #1565C0; margin-bottom:15px;" onclick="window.selectCanteen('2')">
+            <h2 style="margin:0; color:#1565C0;">Canteen 2</h2>
+            <p style="margin:5px 0 0 0; font-size:12px; color:#666;">Near the High School Building</p>
+        </div>
+
+        <div class="order-card" style="display:block; padding:20px; text-align:center; cursor:pointer; border: 2px solid #1565C0; margin-bottom:15px;" onclick="window.selectCanteen('3')">
+            <h2 style="margin:0; color:#1565C0;">Canteen 3</h2>
+            <p style="margin:5px 0 0 0; font-size:12px; color:#666;">Near the Gymnasium</p>
+        </div>
+      </div>
+
+      <div id="view-menu">
+        <div id="menu-container"></div>
+      </div>
+
+      <div id="view-cart" class="hidden">
+        <h3 class="section-title">Your Cart</h3>
+        <div id="cart-container"></div>
+        <div id="cart-actions" class="hidden">
+             <div class="total-row">
+                 <span>Total Amount</span>
+                 <span class="total-price">₱<span id="cart-total">0</span></span>
+             </div>
+             
+             <label style="display:block; margin-top:15px; font-weight:bold; font-size:12px; color:#555;">Payment Method:</label>
+             <select id="payment-method" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ddd; margin-bottom:10px; background:#f9f9f9;" onchange="window.toggleGCash()">
+                 <option value="Cash">💵 Cash on Pickup</option>
+                 <option value="GCash">📱 GCash (Online Payment)</option>
+             </select>
+             
+             <div id="gcash-details" class="hidden" style="background:#e3f2fd; padding:15px; border-radius:8px; margin-bottom:15px; border: 1px dashed #1565C0; text-align:center;">
+                 <p style="margin:0 0 10px 0; font-size:12px; font-weight:bold; color:#1565C0;">Send GCash to: <br><span style="font-size:16px;">0912-345-6789</span></p>
+                 <input type="text" id="gcash-ref" placeholder="Enter Reference No. Here" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc; font-size:12px; text-align:center;">
+             </div>
+
+             <button class="btn btn-primary btn-block" id="checkout-btn">Place Order</button>
+        </div>
+      </div>
+
+      <div id="view-orders" class="hidden">
+        <h3 class="section-title">Order History</h3>
+        <div id="student-orders-container"></div>
+      </div>
+
+      <div id="view-queue" class="hidden">
+        <h3 class="section-title">Kitchen Queue</h3>
+        <div id="queue-container"></div>
+      </div>
+
+      <div id="view-transactions" class="hidden">
+        <h3 class="section-title">Transaction History</h3>
+        <div style="background: white; padding: 10px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #ddd;">
+            <label style="font-size: 11px; font-weight: bold; color: #555;">Manage History:</label>
+            <div style="display: flex; gap: 5px; margin-top: 5px;">
+                <input type="date" id="transaction-date-filter" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                <button class="btn btn-danger" id="bulk-delete-transaction-btn" style="font-size: 10px;">Delete Date</button>
+            </div>
+            <button class="btn btn-outline" id="delete-selected-transaction-btn" style="width: 100%; margin-top: 5px; color: red; border-color: red;">Delete Selected</button>
+        </div>
+        <input type="text" id="transaction-search" placeholder="Search Receipts..." style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px;">
+        <div id="transactions-container"></div>
+      </div>
+
+      <div id="view-reports" class="hidden">
+        <h3 class="section-title">Disciplinary Reports</h3>
+        <h4 style="color:#D32F2F; margin-top:10px; border-bottom: 2px solid #fee; padding-bottom:5px;">🔴 Pending Reports</h4>
+        <div id="reports-pending-container"></div>
+        <h4 style="color:#4caf50; margin-top:25px; border-bottom: 2px solid #e8f5e9; padding-bottom:5px;">🟢 Actioned / Reported</h4>
+        <div id="reports-actioned-container"></div>
+      </div>
+
+      <div id="view-accounts" class="hidden">
+        <h3 class="section-title">User Accounts</h3>
+        <input type="text" id="account-search" placeholder="Search Name or ID..." style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
+        <button class="btn btn-primary" style="width:100%; margin-bottom:15px;" id="add-user-btn">+ Add New User</button>
+        <div id="accounts-container"></div>
+      </div>
+
+      <div id="view-favorite" class="hidden">
+        <h3 class="section-title">Saved Favorites</h3>
+        <div id="fav-container"></div>
+      </div>
+
+      <div id="view-profile" class="hidden">
+        <div class="profile-card">
+            <div class="avatar-circle" id="profile-initials">--</div>
+            <h2 id="profile-name" style="margin-bottom:0;">--</h2>
+            <p id="profile-display-lrn" style="margin:0 0 15px; color:#666; font-size:14px; letter-spacing:1px; font-weight:bold;">--</p>
+            <p id="profile-role" class="role-badge student">Student</p>
+            <div class="info-grid hidden" id="profile-extras"></div>
+            <button id="logout-btn" class="btn btn-danger btn-block" style="margin-top:20px;">Logout</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <div class="footer-item student-only teacher-only staff-only" id="nav-menu"><div class="icon">🏠</div><span>Menu</span></div>
+      <div class="footer-item student-only teacher-only" id="nav-cart"><div class="icon">🛒</div><span>Cart</span></div>
+      <div class="footer-item student-only teacher-only" id="nav-orders"><div class="icon">🧾</div><span>Orders</span></div>
+      <div class="footer-item student-only teacher-only" id="nav-fav"><div class="icon">❤</div><span>Saved</span></div>
+      
+      <div class="footer-item staff-only hidden" id="nav-queue"><div class="icon">👨‍🍳</div><span>Queue</span></div>
+      <div class="footer-item staff-only hidden" id="nav-transactions"><div class="icon">📜</div><span>History</span></div>
+      
+      <div class="footer-item admin-only hidden" id="nav-reports"><div class="icon">⚠️</div><span>Reports</span></div>
+      <div class="footer-item admin-only hidden" id="nav-accounts"><div class="icon">👥</div><span>Users</span></div>
+      
+      <div class="footer-item" id="nav-profile"><div class="icon">👤</div><span>Me</span></div>
+    </div>
+
+  </div>
+
+  <div id="user-modal" class="modal hidden">
+    <div class="modal-content animate-pop" style="text-align:left; max-height: 90vh; overflow-y: auto;">
+        <h3 style="text-align:center" id="modal-title">Manage Account</h3>
+        <input type="hidden" id="edit-user-id"> 
+        <label>Role</label>
+        <select id="user-role" style="width:100%; padding:10px; margin-bottom:10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;" onchange="window.toggleRoleFields()">
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="staff">Canteen Staff</option>
+            <option value="admin">Admin</option>
+        </select>
+        <div id="id-block">
+            <label id="id-label">LRN (12 Digits)</label>
+            <input type="number" id="user-lrn" placeholder="Enter ID">
+        </div>
+        <label>Full Name Details</label>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="user-lname" placeholder="Last Name" style="flex:1">
+            <input type="text" id="user-fname" placeholder="First Name" style="flex:1">
+        </div>
+        <input type="text" id="user-mname" placeholder="Middle Name" style="width:100%; margin-top:5px;">
+        <label>Password</label>
+        <input type="text" id="user-pass" placeholder="Set Password">
+        
+        <div id="student-fields">
+            <label>Grade Level</label>
+            <select id="student-grade" style="width:100%; padding:10px; margin-bottom:10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;"><option value="11">Grade 11</option><option value="12">Grade 12</option></select>
+            <label>Section</label><input type="text" id="student-section" placeholder="e.g. ICT A">
+            <label>Adviser</label><input type="text" id="student-adviser" placeholder="Adviser Name">
+        </div>
+        <div id="teacher-fields" class="hidden">
+            <label>Grade Level Advisory</label><select id="teacher-grade" style="width:100%; padding:10px; margin-bottom:10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;"><option value="11">Grade 11</option><option value="12">Grade 12</option></select>
+            <label>Section</label><input type="text" id="teacher-section" placeholder="e.g. STEM B">
+            <label>Cluster</label><select id="teacher-cluster" style="width:100%; padding:10px; margin-bottom:10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;"><option value="1">Cluster 1</option><option value="2">Cluster 2</option><option value="3">Cluster 3</option><option value="4">Cluster 4</option><option value="5">Cluster 5</option><option value="6">Cluster 6</option><option value="7">Cluster 7</option><option value="8">Cluster 8</option><option value="9">Cluster 9</option><option value="10">Cluster 10</option><option value="11">Cluster 11</option><option value="12">Cluster 12</option></select>
+        </div>
+        <div id="staff-fields" class="hidden">
+            <label>Canteen Number</label><select id="staff-canteen" style="width:100%; padding:10px; margin-bottom:10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 5px;"><option value="1">Canteen 1</option><option value="2">Canteen 2</option><option value="3">Canteen 3</option></select>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:15px;">
+            <button class="btn btn-primary" style="flex:1" id="save-user-btn" onclick="window.saveUser()">Save</button>
+            <button class="btn btn-outline" style="flex:1" onclick="document.getElementById('user-modal').classList.add('hidden')">Cancel</button>
+        </div>
+    </div>
+  </div>
+
+  <div id="add-product-modal" class="modal hidden">
+      <div class="modal-content animate-pop">
+          <h3 id="product-modal-title">Manage Item</h3>
+          <input type="hidden" id="edit-product-id"> 
+          <input type="text" id="new-p-name" placeholder="Name">
+          <input type="number" id="new-p-price" placeholder="Price">
+          <input type="number" id="new-p-stock" placeholder="Stock">
+          <input type="text" id="new-p-img" placeholder="Image URL">
+          <select id="new-p-cat"><option value="biscuit">Biscuit</option><option value="junk">Snacks</option><option value="beverage">Drinks</option><option value="rice">Meals</option></select>
+          <div style="display:flex; gap:10px; margin-top:10px;">
+              <button class="btn btn-primary" style="flex:1" id="save-product-btn" onclick="window.saveProduct()">Save</button>
+              <button class="btn btn-danger" style="flex:1" onclick="document.getElementById('add-product-modal').classList.add('hidden')">Cancel</button>
+          </div>
+      </div>
+  </div>
+
+  <div id="report-modal" class="modal hidden">
+    <div class="modal-content animate-pop">
+        <h3>Report an Issue</h3>
+        <p style="font-size:12px; color:#666;">Describe the issue regarding this student's order.</p>
+        <input type="number" id="report-lrn" readonly style="background:#eee; font-weight:bold; color:#d32f2f;">
+        <textarea id="report-reason" placeholder="What happened? (e.g. Skipped line, didn't pay)" style="width:100%; height:80px; margin-top:10px; padding:10px; border:1px solid #ddd; border-radius:8px;"></textarea>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <button class="btn btn-danger" style="flex:1" id="submit-report-btn" onclick="window.submitReport()">Submit to Admin</button>
+            <button class="btn btn-outline" style="flex:1" onclick="document.getElementById('report-modal').classList.add('hidden')">Cancel</button>
+        </div>
+    </div>
+  </div>
+
+  <div id="discipline-modal" class="modal hidden">
+    <div class="modal-content animate-pop" style="text-align:left;">
+        <h3 style="text-align:center; color:#D32F2F;">Disciplinary Action</h3>
+        <input type="hidden" id="discipline-target-id">
+        <input type="hidden" id="discipline-report-id">
+        <p style="text-align:center; color:#1565C0; font-weight:bold;">Student LRN: <span id="discipline-lrn-display"></span></p>
+
+        <label style="display:block; margin-top:15px; font-weight:bold; font-size:12px;">Login Ban Duration:</label>
+        <select id="discipline-ban-duration" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #ddd;">
+            <option value="0">No Ban (Active)</option>
+            <option value="1">Ban for 1 Day</option>
+            <option value="3">Ban for 3 Days</option>
+            <option value="7">Ban for 1 Week</option>
+            <option value="indefinite">Ban Indefinitely</option>
+        </select>
+
+        <label style="display:block; font-weight:bold; font-size:12px;">Show Floating Warning Note For:</label>
+        <select id="discipline-note-duration" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #ddd;">
+            <option value="0">Don't show a note</option>
+            <option value="1">Show for 1 Day</option>
+            <option value="3">Show for 3 Days</option>
+            <option value="7">Show for 1 Week</option>
+            <option value="indefinite">Show until I remove it</option>
+        </select>
+
+        <label style="display:block; font-weight:bold; font-size:12px;">Admin Message / Warning Note:</label>
+        <textarea id="discipline-message" placeholder="Type the warning message here..." style="width:100%; height:70px; padding:10px; border:1px solid #ddd; border-radius:5px; font-family:inherit;"></textarea>
+        
+        <div style="display:flex; gap:10px; margin-top:15px;">
+            <button class="btn btn-danger" style="flex:1" id="save-discipline-btn" onclick="window.saveDisciplineAction()">Apply Action</button>
+            <button class="btn btn-outline" style="flex:1" onclick="document.getElementById('discipline-modal').classList.add('hidden')">Cancel</button>
+        </div>
+    </div>
+  </div>
+
+  <div id="student-warning-modal" class="modal hidden">
+      <div class="modal-content animate-pop" style="border: 3px solid #ff9800;">
+          <div style="font-size: 40px; margin-bottom:-10px;">⚠️</div>
+          <h3 style="color:#ff9800; margin-bottom:5px;">Admin Notice</h3>
+          <p id="student-warning-message" style="font-size:14px; margin: 15px 0; color:#333; font-weight:600; padding:10px; background:#fff3e0; border-radius:8px;"></p>
+          <p id="student-warning-duration" style="font-size:11px; color:#777; margin-bottom:20px;"></p>
+          <button class="btn btn-primary btn-block" onclick="document.getElementById('student-warning-modal').classList.add('hidden')">I Understand</button>
+      </div>
+  </div>
+
+  <div id="qr-modal" class="modal hidden" onclick="this.classList.add('hidden')">
+      <div class="modal-content animate-pop">
+          <h3>Scan for Menu</h3>
+          <div class="qr-display"><img id="real-qr-code" src="" alt="QR" style="width:100%"></div>
+          <button class="btn btn-danger" style="margin-top:15px; width:100%">Close</button>
+      </div>
+  </div>
+
+  <div id="receipt-area" class="hidden-print">
+    <div style="width: 300px; padding: 20px; border: 1px dashed black; font-family: monospace;">
+        <h3 style="text-align:center; margin:0;">CANTEEN RECEIPT</h3>
+        <p style="text-align:center; font-size:12px; margin-bottom:20px;">Official Receipt</p>
+        <p><strong>Order ID:</strong> <span id="print-id"></span></p>
+        <p><strong>Date:</strong> <span id="print-date"></span></p>
+        <hr>
+        <div id="print-items"></div>
+        <hr>
+        <h3 style="text-align:right" id="print-total"></h3>
+        <p style="text-align:center; margin-top:20px;">Thank you for ordering!</p>
+    </div>
+  </div>
+
+</body>
+</html>
